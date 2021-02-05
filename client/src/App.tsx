@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Box, Card, Grid, Input, Toolbar, Typography } from "@material-ui/core";
+import { Box, Button, Card, Grid, Input, TextField, Toolbar, Typography } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
@@ -14,8 +14,8 @@ const useStyles = makeStyles((theme) => ({
   },
   box: {
     height: "60%",
-    width: "40%",
-    zIndex: 1,
+    width: "60%",
+    boxShadow: theme.shadows[24],
   },
   background: {
     backgroundImage: "url(https://cdn.sixtyandme.com/wp-content/uploads/2018/06/Sixty-and-Me_3-Ways-to-Keep-Having-Fun-in-Your-60s.jpg)",
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "100%",
     backgroundSize: "cover",
     zIndex: -1,
-    filter: "blur(6px)",
+    transition: "all 1000ms",
   },
   centered: {
     textAlign: "center",
@@ -35,23 +35,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 function App() {
   const classes = useStyles();
+  const [blur, setBlur] = useState(6);
+  useEffect(() => {
+    setBlur(2);
+  }, []);
   return (
     <div className={classes.root}>
-      <Box boxShadow={23} className={classes.box} justifyItems="space-between" alignItems="center" display="flex">
-        <Box m="auto">
-          <Grid xs={12} alignItems="center" justify="center" direction="row">
-            <Typography className={classes.centered} variant="h3">
-              Idk fucken project name
-            </Typography>
-            <Typography className={classes.centered} variant="h4">
-              Enter a code
-            </Typography>
+      <div className={classes.background} style={{ filter: `blur(${blur}px)` }} />
+      <Card className={classes.box}>
+        <Grid style={{ height: "100%" }} container justify="center" alignItems="center">
+          <Grid container xs={12} alignItems="center" justify="center">
+            <Grid xs={12}>
+              <Typography className={classes.centered} variant="h4">
+                Enter a code
+              </Typography>
+              <Grid container xs={12} alignItems="center" justify="center">
+                <TextField label="Code" inputProps={{ style: { textAlign: "center" } }} />
+              </Grid>
+              <Grid container xs={12} alignItems="center" justify="center">
+                <Button color="primary">Create session</Button>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid xs={12} alignItems="center" justify="center">
-            <Input placeholder="Code" style={{ textAlign: "center", marginTop: "10%" }} />
-          </Grid>
-        </Box>
-      </Box>
+        </Grid>
+      </Card>
     </div>
   );
 }

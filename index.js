@@ -38,7 +38,7 @@ const postgraphileOptions = {
 };
 
 //run all sql scripts before
-(async() => await run_all_sql_scripts())()
+(async() => await run_all_sql_scripts())();
 
 //this will tell express to let postgraphile handle /graphql requests. process.env.Data
 app.use(postgraphile(process.env.DATABASE_URL, postgraphileOptions))
@@ -46,6 +46,5 @@ app.listen(process.env.PORT, () => console.log(`Server running on ${process.env.
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', (req, res) => {
-  //res.send('hello world');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

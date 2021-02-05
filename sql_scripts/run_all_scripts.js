@@ -11,7 +11,7 @@ async function run_all_sql_scripts() {
     process.env.DATABASE_URL
   );
   await client.connect();
-  //await exec_file
+  await exec_file('init.sql', client)
   await client.end().catch((err) => console.log(err));
 }
 module.exports = run_all_sql_scripts;
