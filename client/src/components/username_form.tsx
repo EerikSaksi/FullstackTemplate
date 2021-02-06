@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { Button, Grid, TextField, Typography } from "@material-ui/core";
+import { Button, Fade, Grid, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const USERNAME = gql`
@@ -13,6 +13,16 @@ const USERNAME = gql`
 const CREATE_USER = gql`
   mutation($username: String!) {
     createUser(input: { user: { username: $username } }) {
+      user {
+        username
+      }
+    }
+  }
+`;
+i;
+const CREATE_USER = gql`
+  mutation($username: String!) {
+    deleteUser(input: { user: { username: $username } }) {
       user {
         username
       }
@@ -38,22 +48,33 @@ const UsernameForm: React.FC<{ setParentUsername: (arg: string) => void }> = ({ 
       }
     },
   });
+  const [deleteUser, { data: deleteData }] = useMutation(CREATE_USER, {
+    variables: { username },
+    onCompleted: (data) => {
+      if (data?.createUser?.user?.username) {
+        setParentUsername(data.createUser.user.username);
+        setFormOpacity(0);
+      }
+    },
+  });
   return (
     <React.Fragment>
-      {mutationData ? (
-        <Typography variant="h3" style={{ opacity: 1 - formOpacity }} className={classes.transition}>
-          Your display name is {mutationData ? mutationData.createUser.user.username : undefined}
-        </Typography>
+      {mutationData && (!deleteData || deleteData.user.username != mutationData.user.username) ? (
+        <Fade enter={true} in={true}>
+          <Typography variant="h3" className={classes.transition}>
+            Your display name is {mutationData ? mutationData.createUser.user.username : undefined}
+          </Typography>
+          <Button onPress={() => deleteUser()}>Change?</Button>
+        </Fade>
       ) : (
-        <Grid container justify="center" alignItems="center" direction="row" className={classes.transition} style={{ opacity: formOpacity }}>
-          <Grid xs={8}>
-            <TextField label="Enter display name" value={username} onChange={({ target }) => setUsername(target.value)} />
-          </Grid>
+        <Fade in={!mutationData}>
+          <Grid container justify="center" alignItems="center" direction="row" className={classes.transition}>
+            <TextField value={username} onChange={({ target }) => setUsername(target.value)} />
             <Button disabled={data?.user || !username} onClick={() => createUser()}>
-              Set username
+              Set display name
             </Button>
-            {data?.user ? <Typography variant="body1">Username taken</Typography> : undefined}
-        </Grid>
+          </Grid>
+        </Fade>
       )}
     </React.Fragment>
   );
