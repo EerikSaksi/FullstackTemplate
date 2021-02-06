@@ -3,12 +3,14 @@ const express = require('express')
 const {postgraphile} = require('postgraphile')
 const path = require('path')
 const run_all_sql_scripts = require('./sql_scripts/run_all_scripts')
+const cors = require('cors')
 
 //access process.env variables defined in gitignored .env file
 require('dotenv').config()
 
 //create express app, this defines our http request routes. 
 const app = express()
+app.use(cors())
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
@@ -39,6 +41,7 @@ const postgraphileOptions = {
 
 //run all sql scripts before
 (async() => await run_all_sql_scripts())();
+app.use(cors())
 
 //this will tell express to let postgraphile handle /graphql requests. process.env.Data
 app.use(postgraphile(process.env.DATABASE_URL, postgraphileOptions))

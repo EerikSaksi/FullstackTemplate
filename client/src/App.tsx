@@ -3,6 +3,7 @@ import "./App.css";
 import { Box, Button, Card, Grid, Input, TextField, Toolbar, Typography } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
+import UsernameForm from "./components/username_form";
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     zIndex: -1,
   },
-  box: {
+  card: {
     height: "60%",
     width: "60%",
     boxShadow: theme.shadows[24],
@@ -36,21 +37,21 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   const [blur, setBlur] = useState(6);
+  const [username, setUsername] = useState<undefined | string>(undefined);
   useEffect(() => {
     setBlur(2);
   }, []);
   return (
     <div className={classes.root}>
       <div className={classes.background} style={{ filter: `blur(${blur}px)` }} />
-      <Card className={classes.box}>
+      <Card className={classes.card}>
         <Grid style={{ height: "100%" }} container justify="center" alignItems="center">
+          <UsernameForm setParentUsername={setUsername} />
           <Grid container xs={12} alignItems="center" justify="center">
-            <Grid xs={12}>
-              <Typography className={classes.centered} variant="h4">
-                Enter a code
-              </Typography>
+            <Grid xs={12} container alignItems="center" justify="center">
+              <Typography variant="h4">Enter a code</Typography>
               <Grid container xs={12} alignItems="center" justify="center">
-                <TextField label="Code" inputProps={{ style: { textAlign: "center" } }} />
+                <TextField label="Code" />
               </Grid>
               <Grid container xs={12} alignItems="center" justify="center">
                 <Button color="primary">Create session</Button>
