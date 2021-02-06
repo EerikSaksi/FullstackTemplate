@@ -40,20 +40,21 @@ const UsernameForm: React.FC<{ setParentUsername: (arg: string) => void }> = ({ 
   });
   return (
     <React.Fragment>
-      <div style={{ position: "absolute" }}>
+      {mutationData ? (
         <Typography variant="h3" style={{ opacity: 1 - formOpacity }} className={classes.transition}>
           Your display name is {mutationData ? mutationData.createUser.user.username : undefined}
         </Typography>
-      </div>
-      <Grid container justify="center" alignItems="center" direction="row" className={classes.transition} style={{ opacity: formOpacity }}>
-        <TextField label="Enter display name" value={username} onChange={({ target }) => setUsername(target.value)} />
-        <Grid>
-          <Button disabled={data?.user || !username} onClick={() => createUser()}>
-            Set username
-          </Button>
-          {data?.user ? <Typography variant="body1">Username taken</Typography> : undefined}
+      ) : (
+        <Grid container justify="center" alignItems="center" direction="row" className={classes.transition} style={{ opacity: formOpacity }}>
+          <Grid xs={8}>
+            <TextField label="Enter display name" value={username} onChange={({ target }) => setUsername(target.value)} />
+          </Grid>
+            <Button disabled={data?.user || !username} onClick={() => createUser()}>
+              Set username
+            </Button>
+            {data?.user ? <Typography variant="body1">Username taken</Typography> : undefined}
         </Grid>
-      </Grid>
+      )}
     </React.Fragment>
   );
 };
